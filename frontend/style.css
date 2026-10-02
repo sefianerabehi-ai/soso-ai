@@ -150,6 +150,7 @@ body.theme-light, body.light-theme {
 
 html, body {
   height: 100%;
+  height: 100dvh;
   width: 100%;
   font-family: var(--font-arabic);
   background-color: var(--bg-primary);
@@ -162,8 +163,10 @@ html, body {
 /* App Container */
 .app-container {
   display: flex;
-  height: 100vh;
+  height: 100%;
+  height: 100dvh;
   width: 100vw;
+  width: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -507,12 +510,98 @@ html[dir="ltr"] .conv-title {
   display: flex;
   flex-direction: column;
   height: 100%;
+  height: 100dvh;
+  min-height: 0;
   position: relative;
   background-color: var(--bg-primary);
   background-image: 
     radial-gradient(circle at 92% 8%, rgba(255, 175, 50, 0.12) 0%, transparent 40%),
     radial-gradient(circle at 8% 90%, rgba(255, 150, 30, 0.12) 0%, transparent 45%);
   overflow: hidden;
+}
+
+/* Mobile Top Navigation Bar */
+.mobile-top-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+@media (max-width: 768px) {
+  .mobile-top-bar {
+    display: flex;
+  }
+}
+
+.mobile-menu-btn,
+.mobile-action-btn {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.mobile-menu-btn:hover,
+.mobile-action-btn:hover,
+.mobile-menu-btn:active,
+.mobile-action-btn:active {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-brand-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.3);
+}
+
+.mobile-brand-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+}
+
+/* Mobile Sidebar Backdrop */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9990;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .main-content::before {
@@ -558,7 +647,8 @@ html[dir="ltr"] .conv-title {
 
 /* Messages Scroll Container */
 .messages-container {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
   padding: 8px 18px 6px;
   display: flex;
@@ -568,9 +658,9 @@ html[dir="ltr"] .conv-title {
   z-index: 1;
 }
 
-/* Hero Mode: completely hidden scrollbar and perfectly centered */
+/* Hero Mode: centered on desktop */
 .messages-container.hero-mode {
-  overflow-y: hidden !important;
+  overflow-y: auto;
   justify-content: center;
 }
 
@@ -2161,24 +2251,26 @@ html[dir="ltr"] .logout-user-info-text {
 
 /* Responsive Media Queries */
 @media (max-width: 768px) {
-  html[dir="rtl"] .sidebar {
-    position: absolute;
-    right: 0;
-    left: auto;
+  .sidebar {
+    position: fixed !important;
     top: 0;
     bottom: 0;
+    width: 290px;
+    max-width: 84vw;
+    z-index: 9999;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.6);
+  }
+
+  html[dir="rtl"] .sidebar {
+    right: 0;
+    left: auto;
     transform: translateX(100%);
-    box-shadow: -5px 0 25px rgba(0,0,0,0.5);
   }
 
   html[dir="ltr"] .sidebar {
-    position: absolute;
     left: 0;
     right: auto;
-    top: 0;
-    bottom: 0;
     transform: translateX(-100%);
-    box-shadow: 5px 0 25px rgba(0,0,0,0.5);
   }
 
   .sidebar.open {
@@ -2186,17 +2278,130 @@ html[dir="ltr"] .logout-user-info-text {
   }
 
   .close-sidebar-btn {
-    display: none !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .close-sidebar-btn:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  /* Messages & Hero Scroll in Mobile */
+  .messages-container {
+    padding: 10px 12px 6px;
+  }
+
+  .messages-container.hero-mode {
+    overflow-y: auto !important;
+    justify-content: flex-start !important;
+    padding-top: 14px;
+    padding-bottom: 24px;
+  }
+
+  .hero-welcome {
+    padding: 4px 6px 14px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-brand-top {
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  .hero-logo-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+  }
+
+  .hero-brand-text {
+    font-size: 1.35rem;
+  }
+
+  .hero-main-title {
+    font-size: 1.45rem;
+    margin-bottom: 6px;
+    line-height: 1.25;
+  }
+
+  .hero-subtitle {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    padding: 0 6px;
   }
 
   .suggestion-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
   }
 
-  .current-chat-title {
-    max-width: 180px;
+  .suggestion-card {
+    padding: 12px 14px;
+    border-radius: 14px;
   }
 
+  .suggestion-card .card-content h4 {
+    font-size: 0.92rem;
+  }
+
+  .suggestion-card .card-content p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .suggestion-card .card-icon-badge {
+    width: 36px;
+    height: 36px;
+  }
+
+  .suggestion-card .card-arrow-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Input Section on Mobile */
+  .input-section {
+    padding: 0 10px 10px;
+    flex-shrink: 0 !important;
+  }
+
+  .input-box-container {
+    padding: 5px 8px 5px 12px;
+    gap: 6px;
+    border-radius: 26px;
+  }
+
+  #chatInput {
+    font-size: 0.94rem;
+    padding: 6px 4px;
+    min-height: 26px;
+    max-height: 120px;
+  }
+
+  .send-btn, .voice-btn, .deep-think-btn, .attach-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .send-btn svg, .voice-btn svg, .deep-think-btn svg, .attach-btn svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 @media (min-width: 769px) {
@@ -2846,36 +3051,39 @@ html[dir="ltr"] .toggle-password-btn {
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 13, 20, 0.82) !important;
+  background: rgba(10, 13, 20, 0.85) !important;
   backdrop-filter: blur(18px) !important;
   -webkit-backdrop-filter: blur(18px) !important;
   z-index: 99999;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 16px;
+  align-items: center;
+  padding: 16px 10px;
   animation: fadeIn 0.25s ease;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Luxurious Frosted Glass Modal Card ("الواجهة الشفافة") */
 .auth-card {
-  background: rgba(22, 27, 39, 0.88) !important;
+  background: rgba(22, 27, 39, 0.92) !important;
   backdrop-filter: blur(28px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
   border-radius: 26px !important;
-  max-width: 480px;
-  width: 95%;
-  max-height: min(94vh, 740px);
+  max-width: 460px;
+  width: 100%;
+  margin: auto;
+  max-height: calc(100dvh - 28px);
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  padding: 28px 32px 22px !important;
+  padding: 26px 28px 20px !important;
   box-shadow: 0 30px 80px -10px rgba(0, 0, 0, 0.75), 0 0 50px rgba(255, 122, 0, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
   animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .auth-card::before {
@@ -3995,6 +4203,167 @@ html[dir="rtl"] .verify-pill-btn:hover .auth-back-icon {
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+}
+
+/* ==========================================================
+   Mobile Responsive Rules for Auth & Modals
+   ========================================================== */
+@media (max-width: 480px) {
+  .auth-modal-overlay {
+    padding: 8px 6px;
+  }
+
+  .auth-card {
+    padding: 18px 16px 16px !important;
+    border-radius: 20px !important;
+    max-height: calc(100dvh - 16px);
+  }
+
+  .auth-card::before {
+    top: -20px;
+    height: 70px;
+    width: 180px;
+  }
+
+  .auth-header {
+    margin-bottom: 10px;
+  }
+
+  .auth-logo-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-bottom: 5px;
+  }
+
+  .auth-logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .auth-title {
+    font-size: 1.22rem;
+    margin-bottom: 3px;
+  }
+
+  .auth-subtitle {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .auth-tabs {
+    margin-bottom: 8px;
+    padding: 3px;
+    border-radius: 12px;
+  }
+
+  .auth-tab {
+    padding: 6px 8px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+  }
+
+  .auth-form {
+    gap: 4px;
+  }
+
+  .auth-form .form-group {
+    margin-bottom: 6px;
+  }
+
+  .auth-form .form-group label {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+  }
+
+  .auth-card .form-input {
+    height: 40px;
+    padding: 0 12px;
+    font-size: 0.88rem;
+    border-radius: 11px !important;
+  }
+
+  .auth-card .auth-submit-btn {
+    height: 42px;
+    font-size: 0.92rem;
+    border-radius: 11px !important;
+    margin-top: 2px;
+  }
+
+  .btn-google-auth {
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    border-radius: 11px !important;
+  }
+
+  .auth-divider {
+    margin: 5px 0 7px;
+    font-size: 0.7rem;
+  }
+
+  .auth-card .auth-switch-prompt {
+    margin-top: 8px;
+    font-size: 0.78rem;
+  }
+
+  .forgot-password-row {
+    margin-top: 3px;
+    margin-bottom: 0;
+  }
+
+  .auth-forgot-link-btn {
+    font-size: 0.74rem;
+    padding: 3px 8px;
+  }
+
+  .auth-card .verify-mail-icon-wrap {
+    width: 56px;
+    height: 56px;
+  }
+
+  .auth-card .verify-mail-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .auth-card .verify-instructions h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .auth-card .verify-instructions p {
+    font-size: 0.84rem !important;
+  }
+
+  .auth-card .otp-input {
+    font-size: 1.35rem !important;
+    height: 46px;
+    letter-spacing: 6px;
+  }
+
+  .auth-card .verify-pill-btn {
+    padding: 7px 12px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    padding: 8px 6px;
+  }
+  .modal-card {
+    max-height: calc(100dvh - 16px);
+    border-radius: 18px;
+  }
+  .modal-header {
+    padding: 12px 14px;
+  }
+  .modal-body {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+  .modal-footer {
+    padding: 10px 14px;
+  }
 }
 
 
