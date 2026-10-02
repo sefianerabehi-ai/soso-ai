@@ -525,33 +525,94 @@ class AuthService:
         settings = load_settings()
         relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
 
-        text_plain = f"أهلاً بك {user_name}!\nرمز تفعيل حسابك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت إنشاء هذا الحساب، يمكنك تجاهل هذه الرسالة."
+        user_display = user_name or "صديقنا"
+        text_plain = f"أهلاً بك {user_display}!\nرمز تفعيل حسابك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت إنشاء هذا الحساب، يمكنك تجاهل هذه الرسالة."
         
-        html_content = f"""
-        <!DOCTYPE html>
-        <html dir="rtl" lang="ar">
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>رمز تفعيل SoSo AI</title>
-        </head>
-        <body style="margin:0;padding:20px;background-color:#0f1219;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;margin:0 auto;background-color:#161b27;border:1px solid #2a3449;border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.55);">
-            <tr>
-              <td style="padding:32px 28px;text-align:center;">
-                <div style="font-size:32px;margin-bottom:12px;">🌟</div>
-                <h2 style="margin:0 0 10px;color:#ffffff;font-size:22px;font-weight:700;">رمز تأكيد حسابك في SoSo AI</h2>
-                <p style="margin:0 0 24px;color:#9ca3af;font-size:15px;line-height:1.6;">أهلاً بك <strong>{user_name}</strong>! استخدم رمز التحقق التالي لتفعيل حسابك:</p>
-                <div style="background:linear-gradient(135deg,#ff8c00,#e65100);color:#ffffff;font-size:36px;font-weight:800;letter-spacing:10px;padding:18px 24px;border-radius:14px;display:inline-block;margin:0 auto 24px;box-shadow:0 6px 20px rgba(255,140,0,0.4);font-family:Consolas,monospace;">
+        html_content = f"""<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رمز تفعيل حسابك في SoSo AI</title>
+</head>
+<body style="margin:0;padding:24px 10px;background-color:#0b0f19;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:540px;margin:0 auto;background-color:#151b28;border:1px solid #253047;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.5);">
+    
+    <!-- Top Gradient Bar -->
+    <tr>
+      <td style="height:5px;background:linear-gradient(90deg, #ff7a00, #ff9d00, #ff5500);"></td>
+    </tr>
+
+    <!-- Header Section with Real Hosted Logo -->
+    <tr>
+      <td style="padding:32px 28px 24px;text-align:center;background:linear-gradient(180deg, rgba(255,122,0,0.12) 0%, rgba(21,27,40,0) 100%);border-bottom:1px solid rgba(255,255,255,0.06);">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto;">
+          <tr>
+            <td align="center">
+              <img src="https://soso-ai.onrender.com/assets/logo_icon.png" width="68" height="68" alt="SoSo AI Logo" style="display:block;border-radius:18px;border:2px solid rgba(255,122,0,0.4);box-shadow:0 6px 22px rgba(255,122,0,0.35);margin-bottom:14px;">
+            </td>
+          </tr>
+        </table>
+        <h1 style="margin:0 0 6px;font-size:26px;font-weight:800;color:#ff8c00;letter-spacing:-0.5px;">SoSo AI</h1>
+        <p style="margin:0;font-size:14px;color:#94a3b8;font-weight:500;">منصة الذكاء الاصطناعي الفائقة</p>
+      </td>
+    </tr>
+
+    <!-- Body Content -->
+    <tr>
+      <td style="padding:32px 28px 28px;">
+        <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#ffffff;line-height:1.4;">
+          &#128075; مرحباً بك، {user_display}!
+        </h2>
+        <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#cbd5e1;">
+          شكراً لانضمامك إلى <strong>SoSo AI</strong>. لإتمام عملية إنشاء الحساب وتفعيله بنجاح، يُرجى استخدام رمز التحقق السري أدناه:
+        </p>
+
+        <!-- Code Highlight Box -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:26px 0;">
+          <tr>
+            <td align="center">
+              <div style="display:inline-block;background:linear-gradient(135deg, rgba(255,122,0,0.15) 0%, rgba(255,157,0,0.08) 100%);border:2px dashed #ff8c00;border-radius:16px;padding:18px 36px;text-align:center;">
+                <span style="font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:900;letter-spacing:12px;color:#ff9d00;display:inline-block;padding-left:12px;">
                   {code}
-                </div>
-                <p style="margin:0;color:#6b7280;font-size:13px;">الرمز صالح لمدة 15 دقيقة فقط. لا تشاركه مع أي شخص.</p>
+                </span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Security Notice -->
+        <div style="background-color:#1c2436;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 18px;margin-bottom:24px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td style="font-size:13px;color:#94a3b8;line-height:1.6;">
+                &#9201; <strong>ملاحظة أمنية:</strong> هذا الرمز صالح لمدة <strong>15 دقيقة</strong> فقط. لا تشاركه مع أي شخص حرصاً على أمان حسابك.
               </td>
             </tr>
           </table>
-        </body>
-        </html>
-        """
+        </div>
+
+        <p style="margin:0;font-size:13px;color:#64748b;line-height:1.6;">
+          إذا لم تكن أنت من قام بطلب إنشاء هذا الحساب، يمكنك تجاهل هذه الرسالة بكل أمان ولن يتم تفعيل أي شيء.
+        </p>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="padding:22px 28px;background-color:#101522;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+        <p style="margin:0 0 6px;font-size:12px;color:#64748b;">
+          تم إرسال هذه الرسالة تلقائياً بواسطة نظام الحماية في SoSo AI
+        </p>
+        <p style="margin:0;font-size:12px;color:#475569;">
+          &copy; 2026 SoSo AI &bull; <a href="https://soso-ai.onrender.com" style="color:#ff8c00;text-decoration:none;">soso-ai.onrender.com</a>
+        </p>
+      </td>
+    </tr>
+
+  </table>
+</body>
+</html>"""
 
         if relay_url:
             return self._send_email_http_relay(relay_url, to_email, f"رمز تأكيد حسابك في SoSo AI: {code}", html_content, text_plain)
@@ -559,7 +620,7 @@ class AuthService:
         smtp_host = os.getenv("SMTP_HOST", "") or settings.get("smtp_host", "smtp.gmail.com")
         smtp_port = int(os.getenv("SMTP_PORT", 0) or settings.get("smtp_port", 587) or 587)
         smtp_user = os.getenv("SMTP_USER", "") or settings.get("smtp_user", "rabehisefiane@gmail.com")
-        smtp_pass = os.getenv("SMTP_PASSWORD", "") or settings.get("smtp_password", "mrthbnxlcuuvybva")
+        smtp_pass = os.getenv("SMTP_PASSWORD", "") or settings.get("smtp_password", "")
         smtp_from = os.getenv("SMTP_FROM", "") or settings.get("smtp_from", "rabehisefiane@gmail.com") or smtp_user
 
         if not smtp_host or not smtp_user or not smtp_pass:
@@ -570,76 +631,14 @@ class AuthService:
         sender_email = smtp_from
 
         try:
-            msg = MIMEMultipart("related")
-            msg_alt = MIMEMultipart("alternative")
-            msg.attach(msg_alt)
-
+            msg = MIMEMultipart("alternative")
             msg["Subject"] = f"رمز تأكيد حسابك في SoSo AI: {code}"
             msg["From"] = f'"{sender_name}" <{sender_email}>'
             msg["To"] = to_email
             msg["Reply-To"] = sender_email
 
-            text_plain = f"أهلاً بك {user_name}!\nرمز تفعيل حسابك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت إنشاء هذا الحساب، يمكنك تجاهل هذه الرسالة."
-            
-            html_content = f"""
-            <!DOCTYPE html>
-            <html dir="rtl" lang="ar">
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>رمز تفعيل SoSo AI</title>
-            </head>
-            <body style="margin:0;padding:20px;background-color:#0f1219;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;margin:0 auto;background-color:#161b27;border:1px solid #2a3449;border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.55);">
-                <!-- Header with Logo -->
-                <tr>
-                  <td style="padding:28px 24px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);background:linear-gradient(135deg, rgba(255,122,0,0.18), rgba(234,88,12,0.25));">
-                    <img src="cid:soso_logo" width="62" height="62" alt="SoSo AI" style="display:block;margin:0 auto 10px;border-radius:16px;border:1.5px solid rgba(255,122,0,0.4);box-shadow:0 4px 16px rgba(255,122,0,0.3);">
-                    <h1 style="margin:0;font-size:24px;font-weight:800;color:#FF7A00;letter-spacing:-0.5px;">SoSo AI</h1>
-                    <p style="margin:4px 0 0;font-size:13px;color:#cbd5e1;">مساعدك الذكي ورفيقك المعرفي اليومي</p>
-                  </td>
-                </tr>
-
-                <!-- Content -->
-                <tr>
-                  <td style="padding:28px 24px;">
-                    <h2 style="margin:0 0 12px;font-size:18px;font-weight:700;color:#ffffff;">مرحباً بك، {user_name}! 👋</h2>
-                    <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#bdc1c6;">
-                      شكراً لتسجيلك في SoSo AI. لتأكيد وتفعيل بريدك الإلكتروني والبدء في استخدام كافة ميزات المنصة، استخدم رمز التحقق التالي:
-                    </p>
-
-                    <!-- Verification Code Box -->
-                    <div style="background:#0f1219;border:2px solid #FF7A00;border-radius:14px;padding:18px 20px;text-align:center;margin:24px 0;box-shadow:0 4px 20px rgba(255,122,0,0.15);">
-                      <span style="font-family:'Courier New',Courier,monospace;font-size:32px;font-weight:800;letter-spacing:10px;color:#FF7A00;display:inline-block;padding-left:10px;">
-                        {code}
-                      </span>
-                    </div>
-
-                    <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;text-align:center;">
-                      ⏱️ هذا الرمز صالح لمدة <strong>15 دقيقة</strong> فقط.
-                    </p>
-                    <p style="margin:0;font-size:12px;color:#64748b;text-align:center;line-height:1.5;">
-                      إذا لم تقم بطلب هذا الحساب، يرجى تجاهل هذه الرسالة بأمان تام.
-                    </p>
-                  </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                  <td style="padding:16px 24px;background-color:#121620;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-                    <p style="margin:0;font-size:11px;color:#64748b;">
-                      تم إرسال هذه الرسالة تلقائياً بواسطة نظام الحماية في SoSo AI • جميع الحقوق محفوظة © 2026
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>
-            """
-
-            msg_alt.attach(MIMEText(text_plain, "plain", "utf-8"))
-            msg_alt.attach(MIMEText(html_content, "html", "utf-8"))
-            _attach_logo_if_exists(msg)
+            msg.attach(MIMEText(text_plain, "plain", "utf-8"))
+            msg.attach(MIMEText(html_content, "html", "utf-8"))
 
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
@@ -661,6 +660,100 @@ class AuthService:
 
     def _send_password_reset_email(self, to_email: str, user_name: str, code: str) -> bool:
         settings = load_settings()
+        relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
+
+        user_display = user_name or "صديقنا"
+        text_plain = f"أهلاً بك {user_display}!\nرمز إعادة تعيين كلمة المرور الخاص بك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت ذلك، يرجى تجاهل هذه الرسالة."
+
+        html_content = f"""<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إعادة تعيين كلمة المرور - SoSo AI</title>
+</head>
+<body style="margin:0;padding:24px 10px;background-color:#0b0f19;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:540px;margin:0 auto;background-color:#151b28;border:1px solid #253047;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.5);">
+    
+    <!-- Top Gradient Bar -->
+    <tr>
+      <td style="height:5px;background:linear-gradient(90deg, #ea4335, #ff7a00, #ea580c);"></td>
+    </tr>
+
+    <!-- Header Section with Real Hosted Logo -->
+    <tr>
+      <td style="padding:32px 28px 24px;text-align:center;background:linear-gradient(180deg, rgba(234,67,53,0.12) 0%, rgba(21,27,40,0) 100%);border-bottom:1px solid rgba(255,255,255,0.06);">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto;">
+          <tr>
+            <td align="center">
+              <img src="https://soso-ai.onrender.com/assets/logo_icon.png" width="68" height="68" alt="SoSo AI Logo" style="display:block;border-radius:18px;border:2px solid rgba(234,67,53,0.4);box-shadow:0 6px 22px rgba(234,67,53,0.35);margin-bottom:14px;">
+            </td>
+          </tr>
+        </table>
+        <h1 style="margin:0 0 6px;font-size:26px;font-weight:800;color:#ff8c00;letter-spacing:-0.5px;">SoSo AI</h1>
+        <p style="margin:0;font-size:14px;color:#94a3b8;font-weight:500;">استعادة الحساب والأمان</p>
+      </td>
+    </tr>
+
+    <!-- Body Content -->
+    <tr>
+      <td style="padding:32px 28px 28px;">
+        <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#ffffff;line-height:1.4;">
+          &#128273; مرحباً بك، {user_display}!
+        </h2>
+        <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#cbd5e1;">
+          لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في <strong>SoSo AI</strong>. استخدم الرمز السري أدناه لإتمام عملية تغيير كلمة المرور:
+        </p>
+
+        <!-- Code Highlight Box -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:26px 0;">
+          <tr>
+            <td align="center">
+              <div style="display:inline-block;background:linear-gradient(135deg, rgba(234,67,53,0.15) 0%, rgba(255,122,0,0.08) 100%);border:2px dashed #ea4335;border-radius:16px;padding:18px 36px;text-align:center;">
+                <span style="font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:900;letter-spacing:12px;color:#ea4335;display:inline-block;padding-left:12px;">
+                  {code}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Security Notice -->
+        <div style="background-color:#1c2436;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 18px;margin-bottom:24px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td style="font-size:13px;color:#94a3b8;line-height:1.6;">
+                &#9201; <strong>ملاحظة أمنية:</strong> هذا الرمز صالح لمدة <strong>15 دقيقة</strong> فقط. إذا لم تكن أنت من قام بطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذه الرسالة فحسابك وبياناتك في أمان تام دون أي تغيير.
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <p style="margin:0;font-size:13px;color:#64748b;line-height:1.6;">
+          احرص دائماً على اختيار كلمة مرور قوية وفريدة لحماية بياناتك.
+        </p>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="padding:22px 28px;background-color:#101522;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+        <p style="margin:0 0 6px;font-size:12px;color:#64748b;">
+          رسالة أمان تلقائية صادرة عن نظام الحماية في SoSo AI
+        </p>
+        <p style="margin:0;font-size:12px;color:#475569;">
+          &copy; 2026 SoSo AI &bull; <a href="https://soso-ai.onrender.com" style="color:#ff8c00;text-decoration:none;">soso-ai.onrender.com</a>
+        </p>
+      </td>
+    </tr>
+
+  </table>
+</body>
+</html>"""
+
+        if relay_url:
+            return self._send_email_http_relay(relay_url, to_email, f"رمز إعادة تعيين كلمة المرور في SoSo AI: {code}", html_content, text_plain)
+
         smtp_host = os.getenv("SMTP_HOST", "") or settings.get("smtp_host", "")
         smtp_port = int(os.getenv("SMTP_PORT", 0) or settings.get("smtp_port", 587) or 587)
         smtp_user = os.getenv("SMTP_USER", "") or settings.get("smtp_user", "")
@@ -675,72 +768,14 @@ class AuthService:
         sender_email = smtp_from
 
         try:
-            msg = MIMEMultipart("related")
-            msg_alt = MIMEMultipart("alternative")
-            msg.attach(msg_alt)
-
+            msg = MIMEMultipart("alternative")
             msg["Subject"] = f"رمز إعادة تعيين كلمة المرور في SoSo AI: {code}"
             msg["From"] = f'"{sender_name}" <{sender_email}>'
             msg["To"] = to_email
             msg["Reply-To"] = sender_email
 
-            text_plain = f"أهلاً بك {user_name}!\nرمز إعادة تعيين كلمة المرور الخاص بك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت ذلك، يرجى تجاهل هذه الرسالة."
-
-            html_content = f"""
-            <!DOCTYPE html>
-            <html dir="rtl" lang="ar">
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>إعادة تعيين كلمة المرور</title>
-            </head>
-            <body style="margin:0;padding:20px;background-color:#0f1219;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;margin:0 auto;background-color:#161b27;border:1px solid #2a3449;border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.55);">
-                <tr>
-                  <td style="padding:28px 24px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);background:linear-gradient(135deg, rgba(234,67,53,0.18), rgba(249,115,22,0.22));">
-                    <img src="cid:soso_logo" width="62" height="62" alt="SoSo AI" style="display:block;margin:0 auto 10px;border-radius:16px;border:1.5px solid rgba(255,122,0,0.4);box-shadow:0 4px 16px rgba(255,122,0,0.3);">
-                    <h1 style="margin:0;font-size:24px;font-weight:800;color:#FF7A00;letter-spacing:-0.5px;">SoSo AI</h1>
-                    <p style="margin:4px 0 0;font-size:13px;color:#cbd5e1;">استعادة الحساب والأمان</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:28px 24px;">
-                    <h2 style="margin:0 0 12px;font-size:18px;font-weight:700;color:#ffffff;">مرحباً بك، {user_name}! 🔑</h2>
-                    <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#bdc1c6;">
-                      لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في <strong>SoSo AI</strong>. استخدم الرمز السري التالي لإتمام عملية تغيير كلمة المرور:
-                    </p>
-                    <div style="background:#0f1219;border:2px solid #ea4335;border-radius:14px;padding:18px 20px;text-align:center;margin:24px 0;box-shadow:0 4px 20px rgba(234,67,53,0.15);">
-                      <span style="font-family:'Courier New',Courier,monospace;font-size:32px;font-weight:800;letter-spacing:10px;color:#ea4335;display:inline-block;padding-left:10px;">
-                        {code}
-                      </span>
-                    </div>
-                    <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;text-align:center;">
-                      ⏱️ هذا الرمز صالح لمدة <strong>15 دقيقة</strong> فقط.
-                    </p>
-                    <p style="margin:0;font-size:12px;color:#64748b;text-align:center;line-height:1.5;">
-                      إذا لم تكن أنت من طلب إعادة تعيين كلمة المرور، يرجى تجاهل هذه الرسالة فحسابك وبياناتك في أمان تام دون أي تغيير.
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:16px 24px;background-color:#121620;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-                    <p style="margin:0;font-size:11px;color:#64748b;">
-                      رسالة أمان تلقائية من SoSo AI • جميع الحقوق محفوظة © 2026
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>
-            """
-
-            msg_alt.attach(MIMEText(text_plain, "plain", "utf-8"))
-            msg_alt.attach(MIMEText(html_content, "html", "utf-8"))
-            _attach_logo_if_exists(msg)
-
-            relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
-            if relay_url:
-                return self._send_email_http_relay(relay_url, to_email, f"رمز إعادة تعيين كلمة المرور في SoSo AI: {code}", html_content, text_plain)
+            msg.attach(MIMEText(text_plain, "plain", "utf-8"))
+            msg.attach(MIMEText(html_content, "html", "utf-8"))
 
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
@@ -762,6 +797,175 @@ class AuthService:
 
     def _send_welcome_email(self, to_email: str, user_name: str) -> bool:
         settings = load_settings()
+        relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
+
+        user_display = user_name or "صديقنا"
+        text_plain = f"""مرحباً بك، {user_display}! 👋
+
+يسعدنا انضمامك إلى مجتمع SoSo AI - رفيقك الذكي اليومي للمحادثات، والإبداع، وحل المسائل المعقدة.
+تم تفعيل حسابك بنجاح، وأصبح بإمكانك الآن الاستفادة من كافة الامتيازات التالية:
+
+🌟 امتيازات وميزات حسابك في SoSo AI:
+1. محادثات ذكية فائقة وغير محدودة: تواصل مع أحدث نماذج الذكاء الاصطناعي (Gemini 3.5 Flash Lite و GPT-4o).
+2. تحليل الصور والمستندات واستخراج النصوص (Vision & OCR): ارفع الصور والرسوم البيانية والمعادلات والوثائق.
+3. نمط التفكير والتحليل العميق (Deep Thinking): حل المسائل الرياضية والبرمجية المعقدة خطوة بخطوة.
+4. إدخال واستماع صوتي تفاعلي ذكي: تحدث بصوتك الطبيعي مع التعرف الفوري والاستماع للردود.
+5. مزامنة سحابية وحفظ آمن لسجلاتك: جميع محادثاتك وسجلاتك محفوظة بأمان تام في حسابك الشخصي.
+6. تخصيص كامل للواجهة والسمات: التبديل بين السمات وتعديل طابع الذكاء الاصطناعي.
+
+ابدأ الآن واستمتع بتجربة SoSo AI:
+https://soso-ai.onrender.com
+
+فريق SoSo AI
+"""
+
+        html_content = f"""<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مرحباً بك في SoSo AI</title>
+</head>
+<body style="margin:0;padding:24px 10px;background-color:#0b0f19;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:580px;margin:0 auto;background-color:#151b28;border:1px solid #253047;border-radius:22px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.55);">
+    
+    <!-- Top Gradient Bar -->
+    <tr>
+      <td style="height:5px;background:linear-gradient(90deg, #ff7a00, #ff9d00, #ff5500);"></td>
+    </tr>
+
+    <!-- Header Section with Real Hosted Logo -->
+    <tr>
+      <td style="padding:32px 28px 24px;text-align:center;background:linear-gradient(180deg, rgba(255,122,0,0.12) 0%, rgba(21,27,40,0) 100%);border-bottom:1px solid rgba(255,255,255,0.06);">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto;">
+          <tr>
+            <td align="center">
+              <img src="https://soso-ai.onrender.com/assets/logo_icon.png" width="70" height="70" alt="SoSo AI Logo" style="display:block;border-radius:18px;border:2px solid rgba(255,122,0,0.4);box-shadow:0 6px 22px rgba(255,122,0,0.35);margin-bottom:14px;">
+            </td>
+          </tr>
+        </table>
+        <h1 style="margin:0 0 6px;font-size:26px;font-weight:800;color:#ff8c00;letter-spacing:-0.5px;">SoSo AI</h1>
+        <p style="margin:0;font-size:14px;color:#94a3b8;font-weight:500;">مساعدك الذكي ورفيقك المعرفي اليومي</p>
+      </td>
+    </tr>
+
+    <!-- Body Content -->
+    <tr>
+      <td style="padding:32px 28px 28px;">
+        <h2 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#ffffff;line-height:1.4;">
+          &#127881; أهلاً وسهلاً بك، {user_display}!
+        </h2>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#cbd5e1;">
+          يسعدنا جداً انضمامك إلى مجتمع <strong>SoSo AI</strong>. تم تفعيل وتأكيد حسابك بنجاح، وأصبحت الآن مستعداً لخوض تجربة ذكاء اصطناعي رائدة ومتكاملة لإنجاز دراستك، أعمالك، ومشاريعك الإبداعية بكل سهولة وسرعة.
+        </p>
+
+        <!-- Privileges Card -->
+        <div style="background-color:#1c2436;border:1px solid #2a374f;border-radius:16px;padding:22px 20px;margin-bottom:28px;">
+          <h3 style="margin:0 0 18px;font-size:16px;font-weight:800;color:#ff9d00;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px;">
+            &#11088; أبرز ميزات وامتيازات حسابك الجديد:
+          </h3>
+          
+          <!-- Feature 1 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#128172;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">محادثات ذكية فائقة وغير محدودة</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">تواصل بحرية مع أحدث نماذج Gemini 3.5 Flash Lite و GPT-4o للحصول على إجابات فورية، دقيقة، وشاملة.</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Feature 2 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#128065;&#65039;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">تحليل الصور والمستندات واستخراج النصوص (Vision & OCR)</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">ارفع الصور، المخططات، الوثائق، أو المسائل الرياضية وسيقوم SoSo AI باستخراج النصوص وتحليلها بدقة متناهية.</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Feature 3 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#129504;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">نمط التفكير والتحليل العميق (Deep Thinking)</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">تفعيل التحليل المنطقي المعمق لحل المسائل العلمية والبرمجية المعقدة خطوة بخطوة بكل دقة.</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Feature 4 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#127897;&#65039;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">إدخال واستماع صوتي تفاعلي ذكي</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">تحدث مع SoSo AI بصوتك الطبيعي باللغة العربية ومختلف اللهجات، مع نطق صوتي فوري للردود.</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Feature 5 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#9729;&#65039;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">مزامنة سحابية وحفظ آمن للسجلات</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">جميع محادثاتك وسجلاتك محفوظة بأمان تام في حسابك الشخصي ومتاحة عبر كافة أجهزتك 24/7.</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Feature 6 -->
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td width="36" valign="top" style="font-size:20px;line-height:1.4;">&#127912;</td>
+              <td valign="top">
+                <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:3px;">تخصيص كامل للشخصية والسمات</div>
+                <div style="color:#94a3b8;font-size:13px;line-height:1.5;">بدّل بسلاسة بين المظهر الداكن، الفاتح، والخشبي الفاخر مع التحكم الكامل في نبرة وأسلوب الذكاء الاصطناعي.</div>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+
+        <!-- CTA Button to Live Render App -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:24px 0 10px;">
+          <tr>
+            <td align="center">
+              <a href="https://soso-ai.onrender.com" target="_blank" style="display:inline-block;padding:15px 36px;background:linear-gradient(135deg, #ff7a00 0%, #ea580c 100%);color:#ffffff;text-decoration:none;font-size:16px;font-weight:800;border-radius:14px;box-shadow:0 6px 20px rgba(255,122,0,0.4);">
+                &#128640; ابدأ محادثتك الأولى الآن
+              </a>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="padding:22px 28px;background-color:#101522;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+        <p style="margin:0 0 6px;font-size:12px;color:#94a3b8;">
+          فريق دعم SoSo AI دائماً في خدمتك لمساعدتك على تحقيق أقصى استفادة.
+        </p>
+        <p style="margin:0;font-size:12px;color:#475569;">
+          &copy; 2026 SoSo AI &bull; منصة الذكاء الاصطناعي السحابية &bull; <a href="https://soso-ai.onrender.com" style="color:#ff8c00;text-decoration:none;">soso-ai.onrender.com</a>
+        </p>
+      </td>
+    </tr>
+
+  </table>
+</body>
+</html>"""
+
+        if relay_url:
+            return self._send_email_http_relay(relay_url, to_email, "مرحباً بك في SoSo AI! ميزات وامتيازات حسابك الجديد", html_content, text_plain)
+
         smtp_host = os.getenv("SMTP_HOST", "") or settings.get("smtp_host", "")
         smtp_port = int(os.getenv("SMTP_PORT", 0) or settings.get("smtp_port", 587) or 587)
         smtp_user = os.getenv("SMTP_USER", "") or settings.get("smtp_user", "")
@@ -776,154 +980,14 @@ class AuthService:
         sender_email = smtp_from
 
         try:
-            msg = MIMEMultipart("related")
-            msg_alt = MIMEMultipart("alternative")
-            msg.attach(msg_alt)
-
-            msg["Subject"] = "مرحباً بك في SoSo AI! 🚀 ميزات وامتيازات حسابك الجديد"
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = "مرحباً بك في SoSo AI! ميزات وامتيازات حسابك الجديد"
             msg["From"] = f'"{sender_name}" <{sender_email}>'
             msg["To"] = to_email
             msg["Reply-To"] = sender_email
 
-            text_plain = f"""مرحباً بك، {user_name}! 👋
-
-يسعدنا انضمامك إلى مجتمع SoSo AI - رفيقك الذكي اليومي للمحادثات، والإبداع، وحل المسائل المعقدة.
-تم تفعيل حسابك بنجاح، وأصبح بإمكانك الآن الاستفادة من كافة الامتيازات التالية:
-
-🌟 امتيازات وميزات حسابك في SoSo AI:
-1. محادثات ذكية فائقة وغير محدودة: تواصل مع أحدث نماذج الذكاء الاصطناعي (Gemini 3.5 Flash Lite و GPT-4o) للحصول على إجابات فورية ودقيقة وشاملة.
-2. تحليل الصور والمستندات واستخراج النصوص (Vision & OCR): ارفع الصور والرسوم البيانية والمعادلات والوثائق لاستخراج النصوص وحلها وشرحها بدقة متناهية.
-3. نمط التفكير والتحليل العميق (Deep Thinking): تفعيل نمط التفكير المنطقي خطوة بخطوة للتعامل مع المسائل الرياضية، والبرمجية، والبحوث العلمية المعقدة.
-4. إدخال واستماع صوتي تفاعلي: تحدث بصوتك الطبيعي بأي لغة أو لهجة مع التعرف الفوري والاستماع للردود الصوتية بوضوح.
-5. مزامنة سحابية وحفظ مشفر لسجلاتك: جميع محادثاتك وسجلاتك محفوظة بأمان تام في حسابك الخاص وتزامن عبر كافة أجهزتك.
-6. تخصيص كامل للواجهة والسمات: اختر ما يناسبك بين السمة الداكنة، والفاتحة، والخشبية الفاخرة مع التحكم في طابع وشخصية الذكاء الاصطناعي.
-
-ابدأ الآن واستمتع بتجربة SoSo AI:
-http://127.0.0.1:8000
-
-فريق SoSo AI
-"""
-
-            html_content = f"""
-            <!DOCTYPE html>
-            <html dir="rtl" lang="ar">
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>مرحباً بك في SoSo AI</title>
-            </head>
-            <body style="margin:0;padding:20px;background-color:#0f1219;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;margin:0 auto;background-color:#161b27;border:1px solid #2a3449;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.6);">
-                <!-- Header with Logo -->
-                <tr>
-                  <td style="padding:32px 24px 24px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);background:linear-gradient(135deg, rgba(255,122,0,0.18), rgba(234,88,12,0.25));">
-                    <img src="cid:soso_logo" width="68" height="68" alt="SoSo AI" style="display:block;margin:0 auto 12px;border-radius:18px;border:2px solid rgba(255,122,0,0.4);box-shadow:0 6px 20px rgba(255,122,0,0.35);">
-                    <h1 style="margin:0 0 6px;font-size:26px;font-weight:800;color:#FF7A00;letter-spacing:-0.5px;">SoSo AI</h1>
-                    <p style="margin:0;font-size:14px;color:#cbd5e1;">مساعدك الذكي ورفيقك المعرفي اليومي</p>
-                  </td>
-                </tr>
-
-                <!-- Content -->
-                <tr>
-                  <td style="padding:28px 26px;">
-                    <h2 style="margin:0 0 12px;font-size:20px;font-weight:700;color:#ffffff;">أهلاً وسهلاً بك، {user_name}! 🎉</h2>
-                    <p style="margin:0 0 22px;font-size:14px;line-height:1.7;color:#cbd5e1;">
-                      يسعدنا جداً انضمامك إلى منصة <strong>SoSo AI</strong>. تم تفعيل وتأكيد حسابك بنجاح، وأصبحت الآن جاهزاً لخوض تجربة ذكاء اصطناعي استثنائية متكاملة لإنجاز دراستك، أعمالك، ومشاريعك الإبداعية بكل سهولة.
-                    </p>
-
-                    <!-- Privileges Card -->
-                    <div style="background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,122,0,0.25);border-radius:16px;padding:22px 20px;margin-bottom:26px;">
-                      <h3 style="margin:0 0 16px;font-size:16px;font-weight:800;color:#FFA74D;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;">
-                        🌟 أبرز ميزات وامتيازات حسابك الجديد:
-                      </h3>
-                      
-                      <!-- Point 1 -->
-                      <div style="margin-bottom:14px;display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">💬</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">محادثات ذكية فائقة وغير محدودة</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">تواصل بحرية مع نماذج Gemini 3.5 Flash Lite و GPT-4o للحصول على إجابات تحليلية فورية وشاملة لأي سؤال أو فكرة.</p>
-                        </div>
-                      </div>
-
-                      <!-- Point 2 -->
-                      <div style="margin-bottom:14px;display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">👁️</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">تحليل الصور والمستندات واستخراج النصوص (Vision & OCR)</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">ارفع أي صورة، مستند، رسم بياني، أو معادلة رياضية وسيقوم SoSo AI باستخراج النصوص وتحليلها وتقديم الشرح الدقيق.</p>
-                        </div>
-                      </div>
-
-                      <!-- Point 3 -->
-                      <div style="margin-bottom:14px;display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">🧠</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">نمط التفكير والتحليل العميق (Deep Thinking)</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">تفعيل زر التفكير المنطقي العميق للمسائل الرياضية والفيزيائية المعقدة، والبرمجة المتقدمة، والاستنتاج خطوة بخطوة.</p>
-                        </div>
-                      </div>
-
-                      <!-- Point 4 -->
-                      <div style="margin-bottom:14px;display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">🎙️</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">إدخال واستماع صوتي تفاعلي ذكي</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">تحدث مع SoSo AI بصوتك الطبيعي بمختلف اللهجات واللغات مع الرد الصوتي المباشر والواضح.</p>
-                        </div>
-                      </div>
-
-                      <!-- Point 5 -->
-                      <div style="margin-bottom:14px;display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">☁️</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">مزامنة سحابية وحفظ مشفر لسجلاتك</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">كافة محادثاتك وسجلاتك محفوظة بأمان تام ومشفرة بحسابك الشخصي، ويمكنك استئنافها من أي جهاز في أي وقت.</p>
-                        </div>
-                      </div>
-
-                      <!-- Point 6 -->
-                      <div style="display:flex;align-items:flex-start;">
-                        <div style="font-size:18px;margin-left:10px;line-height:1.4;">🎨</div>
-                        <div>
-                          <strong style="color:#ffffff;font-size:14px;">تخصيص كامل للشخصية والسمات</strong>
-                          <p style="margin:2px 0 0;font-size:13px;line-height:1.5;color:#94a3b8;">اختر بين المظهر الداكن، الفاتح، والخشبي الكلاسيكي، مع إمكانية تعديل طابع وشخصية الذكاء الاصطناعي ودرجة إبداعه.</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Call To Action Button -->
-                    <div style="text-align:center;margin:28px 0 10px;">
-                      <a href="http://127.0.0.1:8000" style="display:inline-block;padding:14px 34px;background:linear-gradient(135deg, #FF7A00 0%, #EA580C 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;border-radius:14px;box-shadow:0 4px 18px rgba(255,122,0,0.45);">
-                        🚀 ابدأ محادثتك الأولى الآن
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                  <td style="padding:18px 24px;background-color:#121620;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-                    <p style="margin:0 0 6px;font-size:12px;color:#94a3b8;">
-                      إذا كان لديك أي سؤال أو استفسار، فريق الدعم دائماً في خدمتك.
-                    </p>
-                    <p style="margin:0;font-size:11px;color:#64748b;">
-                      تم إرسال هذا البريد تلقائياً لأنك قمت بإنشاء حساب في SoSo AI • جميع الحقوق محفوظة © 2026
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>
-            """
-
-            msg_alt.attach(MIMEText(text_plain, "plain", "utf-8"))
-            msg_alt.attach(MIMEText(html_content, "html", "utf-8"))
-            _attach_logo_if_exists(msg)
-
-            relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
-            if relay_url:
-                return self._send_email_http_relay(relay_url, to_email, "مرحباً بك في SoSo AI! 🚀 ميزات وامتيازات حسابك الجديد", html_content, text_plain)
+            msg.attach(MIMEText(text_plain, "plain", "utf-8"))
+            msg.attach(MIMEText(html_content, "html", "utf-8"))
 
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
