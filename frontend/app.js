@@ -732,10 +732,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================
   // Sidebar Controls
   // ==========================================================
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+  const mobileNewChatBtn = document.getElementById("mobileNewChatBtn");
+
+  function closeMobileSidebar() {
+    sidebar.classList.remove("open");
+    if (sidebarBackdrop) sidebarBackdrop.classList.remove("active");
+  }
+
   if (toggleSidebarBtn) {
     toggleSidebarBtn.addEventListener("click", () => {
       if (window.innerWidth <= 768) {
-        sidebar.classList.toggle("open");
+        const isOpen = sidebar.classList.toggle("open");
+        if (sidebarBackdrop) sidebarBackdrop.classList.toggle("active", isOpen);
       } else {
         sidebar.classList.toggle("collapsed");
       }
@@ -743,8 +752,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (closeSidebarBtn) {
-    closeSidebarBtn.addEventListener("click", () => {
-      sidebar.classList.remove("open");
+    closeSidebarBtn.addEventListener("click", closeMobileSidebar);
+  }
+
+  if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener("click", closeMobileSidebar);
+  }
+
+  if (mobileNewChatBtn) {
+    mobileNewChatBtn.addEventListener("click", () => {
+      closeMobileSidebar();
+      if (newChatBtn) newChatBtn.click();
     });
   }
 
@@ -841,7 +859,7 @@ document.addEventListener("DOMContentLoaded", () => {
       item.addEventListener("click", (e) => {
         if (e.target.closest(".conv-actions")) return;
         selectConversation(c.id);
-        if (window.innerWidth <= 768 && sidebar) sidebar.classList.remove("open");
+        closeMobileSidebar();
       });
 
       const editBtn = item.querySelector(".edit");
