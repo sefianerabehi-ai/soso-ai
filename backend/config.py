@@ -51,14 +51,14 @@ def load_settings() -> dict:
         "system_prompt": DEFAULT_SYSTEM_PROMPT,
         "openai_api_key": os.getenv("OPENAI_API_KEY", ""),
         "openai_base_url": os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-        "openai_model": "gpt-4o-mini",
+        "openai_model": "gpt-4o",
         "google_client_id": os.getenv("GOOGLE_CLIENT_ID", ""),
         "google_client_secret": os.getenv("GOOGLE_CLIENT_SECRET", ""),
         "smtp_host": os.getenv("SMTP_HOST", "smtp.gmail.com"),
         "smtp_port": int(os.getenv("SMTP_PORT", 587) or 587),
-        "smtp_user": os.getenv("SMTP_USER", ""),
-        "smtp_password": os.getenv("SMTP_PASSWORD", ""),
-        "smtp_from": os.getenv("SMTP_FROM", "")
+        "smtp_user": os.getenv("SMTP_USER", "rabehisefiane@gmail.com"),
+        "smtp_password": os.getenv("SMTP_PASSWORD", "mrthbnxlcuuvybva"),
+        "smtp_from": os.getenv("SMTP_FROM", "rabehisefiane@gmail.com")
     }
 
     if SETTINGS_FILE.exists():

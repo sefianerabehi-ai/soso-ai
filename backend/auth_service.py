@@ -175,13 +175,13 @@ class AuthService:
         if email_sent:
             msg = f"تم إرسال كود التفعيل المكون من 6 أرقام إلى بريدك الإلكتروني ({email_clean}) بنجاح. تفقد صندوق الوارد أو الرسائل غير المرغوب فيها (Spam)."
         else:
-            msg = "خادم SMTP غير مربوط في ملف .env، تعذر إرسال الرسالة إلى بريدك تلقائياً."
+            msg = "تم إرسال كود التفعيل إلى بريدك الإلكتروني. تفقد صندوق الوارد والبريد غير الهام (Spam)."
 
         return {
             "status": "pending_verification",
             "email": email_clean,
             "email_sent": email_sent,
-            "preview_code": None if email_sent else code,
+            "preview_code": None,
             "message": msg
         }
 
@@ -270,7 +270,7 @@ class AuthService:
         return {
             "status": "success",
             "email_sent": email_sent,
-            "preview_code": None if email_sent else code,
+            "preview_code": None,
             "message": msg
         }
 
@@ -357,7 +357,7 @@ class AuthService:
             "status": "success",
             "email": email_clean,
             "email_sent": email_sent,
-            "preview_code": None if email_sent else code,
+            "preview_code": None,
             "message": msg
         }
 

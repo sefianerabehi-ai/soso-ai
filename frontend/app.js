@@ -3436,28 +3436,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (goToSignUpBtn) goToSignUpBtn.addEventListener("click", () => switchAuthTab("signup"));
 
   function handleSmtpVerificationState(data) {
-    if (!smtpNoticeBox) return;
-    if (data && data.email_sent) {
-      smtpNoticeBox.style.display = "none";
-    } else {
-      smtpNoticeBox.style.display = "block";
-      if (revealedCodeDisplay) {
-        revealedCodeDisplay.style.display = "none";
-        revealedCodeDisplay.textContent = "";
-      }
-      if (revealCodeBtn) {
-        revealCodeBtn.onclick = () => {
-          if (data && data.preview_code && revealedCodeDisplay) {
-            revealedCodeDisplay.textContent = data.preview_code;
-            revealedCodeDisplay.style.display = "block";
-            if (verifyOtpInput) {
-              verifyOtpInput.value = data.preview_code;
-              verifyOtpInput.focus();
-            }
-          }
-        };
-      }
-    }
+    if (smtpNoticeBox) smtpNoticeBox.style.display = "none";
   }
 
   // 1. Sign Up Submit
@@ -3685,28 +3664,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Forgot & Reset Password Flow
   // ==========================================================
   function handleSmtpResetState(data) {
-    if (!smtpResetNoticeBox) return;
-    if (data && data.email_sent) {
-      smtpResetNoticeBox.style.display = "none";
-    } else {
-      smtpResetNoticeBox.style.display = "block";
-      if (revealedResetCodeDisplay) {
-        revealedResetCodeDisplay.style.display = "none";
-        revealedResetCodeDisplay.textContent = "";
-      }
-      if (revealResetCodeBtn) {
-        revealResetCodeBtn.onclick = () => {
-          if (data && data.preview_code && revealedResetCodeDisplay) {
-            revealedResetCodeDisplay.textContent = data.preview_code;
-            revealedResetCodeDisplay.style.display = "block";
-            if (resetOtpInput) {
-              resetOtpInput.value = data.preview_code;
-              resetOtpInput.focus();
-            }
-          }
-        };
-      }
-    }
+    if (smtpResetNoticeBox) smtpResetNoticeBox.style.display = "none";
   }
 
   function startResetResendTimer() {

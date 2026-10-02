@@ -791,18 +791,6 @@
           <p>أدخل رمز التحقق المكون من 6 أرقام المرسل إلى:<br><strong id="verifyEmailDisplay"></strong></p>
         </div>
 
-        <!-- SMTP status & optional fallback -->
-        <div id="smtpNoticeBox" class="smtp-notice-card" style="display: none;">
-          <div class="smtp-notice-header">
-            <span class="smtp-status-badge">تنبيه خادم البريد</span>
-            <span class="smtp-status-text">خادم SMTP غير مربوط في ملف .env</span>
-          </div>
-          <p class="smtp-notice-desc">
-            لم نتمكن من إرسال الرسالة إلى بريدك تلقائياً لعدم اكتمال بيانات SMTP في <code>.env</code>. يمكنك الضغط أدناه لإظهار الكود المؤقت للمتابعة:
-          </p>
-          <button type="button" class="btn-reveal-code" id="revealCodeBtn">إظهار كود التفعيل المؤقت</button>
-          <div id="revealedCodeDisplay" class="revealed-code-box" style="display: none;"></div>
-        </div>
 
         <div class="form-group otp-group">
           <label for="verifyOtpInput">رمز التفعيل (6 أرقام)</label>
@@ -936,18 +924,6 @@
           <p>أدخل الرمز المكون من 6 أرقام المرسل إلى:<br><strong id="resetEmailDisplay"></strong></p>
         </div>
 
-        <!-- Fallback notice if SMTP unavailable -->
-        <div id="smtpResetNoticeBox" class="smtp-notice-card" style="display: none;">
-          <div class="smtp-notice-header">
-            <span class="smtp-status-badge">تنبيه خادم البريد</span>
-            <span class="smtp-status-text">خادم SMTP غير مربوط في ملف .env</span>
-          </div>
-          <p class="smtp-notice-desc">
-            لم نتمكن من إرسال الرسالة إلى بريدك تلقائياً لعدم اكتمال بيانات SMTP في <code>.env</code>. يمكنك الضغط أدناه لإظهار الكود المؤقت للمتابعة:
-          </p>
-          <button type="button" class="btn-reveal-code" id="revealResetCodeBtn">إظهار كود التحقق المؤقت</button>
-          <div id="revealedResetCodeDisplay" class="revealed-code-box" style="display: none;"></div>
-        </div>
 
         <div class="form-group otp-group">
           <label for="resetOtpInput">رمز التحقق (6 أرقام)</label>
