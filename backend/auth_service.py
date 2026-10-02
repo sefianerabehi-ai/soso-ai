@@ -500,13 +500,67 @@ class AuthService:
             self._write_users(users)
         return matched
 
+    def _send_email_http_relay(self, relay_url: str, to_email: str, subject: str, html_content: str, text_plain: str) -> bool:
+        try:
+            import requests
+            payload = {
+                "to": to_email,
+                "subject": subject,
+                "html": html_content,
+                "text": text_plain,
+                "secret": "soso_ai_2026_secret"
+            }
+            res = requests.post(relay_url, json=payload, timeout=20, allow_redirects=True)
+            if res.status_code == 200 and "success" in res.text:
+                print(f"[AUTH-RELAY] Successfully sent email to {to_email} via Google HTTPS Relay!")
+                return True
+            else:
+                print(f"[AUTH-RELAY] Relay returned: {res.status_code} - {res.text}")
+                return False
+        except Exception as e:
+            print(f"[AUTH-RELAY] Failed to send via HTTP relay: {e}")
+            return False
+
     def _send_verification_email(self, to_email: str, user_name: str, code: str) -> bool:
         settings = load_settings()
-        smtp_host = os.getenv("SMTP_HOST", "") or settings.get("smtp_host", "")
+        relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
+
+        text_plain = f"أهلاً بك {user_name}!\nرمز تفعيل حسابك في SoSo AI هو: {code}\nصلاحية الرمز 15 دقيقة.\nإذا لم تكن قد طلبت إنشاء هذا الحساب، يمكنك تجاهل هذه الرسالة."
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html dir="rtl" lang="ar">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>رمز تفعيل SoSo AI</title>
+        </head>
+        <body style="margin:0;padding:20px;background-color:#0f1219;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#ffffff;direction:rtl;text-align:right;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;margin:0 auto;background-color:#161b27;border:1px solid #2a3449;border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.55);">
+            <tr>
+              <td style="padding:32px 28px;text-align:center;">
+                <div style="font-size:32px;margin-bottom:12px;">🌟</div>
+                <h2 style="margin:0 0 10px;color:#ffffff;font-size:22px;font-weight:700;">رمز تأكيد حسابك في SoSo AI</h2>
+                <p style="margin:0 0 24px;color:#9ca3af;font-size:15px;line-height:1.6;">أهلاً بك <strong>{user_name}</strong>! استخدم رمز التحقق التالي لتفعيل حسابك:</p>
+                <div style="background:linear-gradient(135deg,#ff8c00,#e65100);color:#ffffff;font-size:36px;font-weight:800;letter-spacing:10px;padding:18px 24px;border-radius:14px;display:inline-block;margin:0 auto 24px;box-shadow:0 6px 20px rgba(255,140,0,0.4);font-family:Consolas,monospace;">
+                  {code}
+                </div>
+                <p style="margin:0;color:#6b7280;font-size:13px;">الرمز صالح لمدة 15 دقيقة فقط. لا تشاركه مع أي شخص.</p>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+        """
+
+        if relay_url:
+            return self._send_email_http_relay(relay_url, to_email, f"رمز تأكيد حسابك في SoSo AI: {code}", html_content, text_plain)
+
+        smtp_host = os.getenv("SMTP_HOST", "") or settings.get("smtp_host", "smtp.gmail.com")
         smtp_port = int(os.getenv("SMTP_PORT", 0) or settings.get("smtp_port", 587) or 587)
-        smtp_user = os.getenv("SMTP_USER", "") or settings.get("smtp_user", "")
-        smtp_pass = os.getenv("SMTP_PASSWORD", "") or settings.get("smtp_password", "")
-        smtp_from = os.getenv("SMTP_FROM", "") or settings.get("smtp_from", "") or smtp_user or "noreply@soso-ai.app"
+        smtp_user = os.getenv("SMTP_USER", "") or settings.get("smtp_user", "rabehisefiane@gmail.com")
+        smtp_pass = os.getenv("SMTP_PASSWORD", "") or settings.get("smtp_password", "mrthbnxlcuuvybva")
+        smtp_from = os.getenv("SMTP_FROM", "") or settings.get("smtp_from", "rabehisefiane@gmail.com") or smtp_user
 
         if not smtp_host or not smtp_user or not smtp_pass:
             print(f"[AUTH] SMTP is not fully configured in .env. To send real emails, set SMTP_USER and SMTP_PASSWORD.")
@@ -683,6 +737,10 @@ class AuthService:
             msg_alt.attach(MIMEText(text_plain, "plain", "utf-8"))
             msg_alt.attach(MIMEText(html_content, "html", "utf-8"))
             _attach_logo_if_exists(msg)
+
+            relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
+            if relay_url:
+                return self._send_email_http_relay(relay_url, to_email, f"رمز إعادة تعيين كلمة المرور في SoSo AI: {code}", html_content, text_plain)
 
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
@@ -862,6 +920,10 @@ http://127.0.0.1:8000
             msg_alt.attach(MIMEText(text_plain, "plain", "utf-8"))
             msg_alt.attach(MIMEText(html_content, "html", "utf-8"))
             _attach_logo_if_exists(msg)
+
+            relay_url = os.getenv("GMAIL_RELAY_URL", "") or settings.get("gmail_relay_url", "")
+            if relay_url:
+                return self._send_email_http_relay(relay_url, to_email, "مرحباً بك في SoSo AI! 🚀 ميزات وامتيازات حسابك الجديد", html_content, text_plain)
 
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
