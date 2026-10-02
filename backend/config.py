@@ -57,7 +57,7 @@ def load_settings() -> dict:
         "smtp_host": os.getenv("SMTP_HOST", "smtp.gmail.com"),
         "smtp_port": int(os.getenv("SMTP_PORT", 587) or 587),
         "smtp_user": os.getenv("SMTP_USER", "rabehisefiane@gmail.com"),
-        "smtp_password": os.getenv("SMTP_PASSWORD", "mrthbnxlcuuvybva"),
+        "smtp_password": os.getenv("SMTP_PASSWORD", ""),
         "smtp_from": os.getenv("SMTP_FROM", "rabehisefiane@gmail.com"),
         "gmail_relay_url": os.getenv("GMAIL_RELAY_URL", "https://script.google.com/macros/s/AKfycbwRTod-5J-hMWYOtUMAekw0aGo172z5l2CAQHQhdVzmOGRCNrrnttUk1glLYRnQ5gmZ/exec")
     }
