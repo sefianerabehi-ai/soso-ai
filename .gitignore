@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+data/*.db
+data/settings.json
+data/users.json
+scratch/
+test_output.txt
+*.png
+!frontend/assets/*
+!data/uploads/*
+

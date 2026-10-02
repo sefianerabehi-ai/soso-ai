@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoSo AI | رفيقك الذكي اليومي</title>
+  
+  <!-- Modern Responsive Favicon Suite -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png?v=3">
+  <link rel="shortcut icon" href="favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=3">
+  <meta name="theme-color" content="#f97316">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <!-- Google Fonts: Cairo & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js for Code Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <!-- Marked for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- KaTeX for Math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Google Identity Services (GSI) SDK for Official Sign In with Google -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link rel="stylesheet" href="style.css?v=4.1">
+</head>
+<body class="theme-wood">
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-avatar">
+            <img src="assets/logo_icon.png" alt="SoSo AI" class="brand-logo-img">
+          </div>
+          <div class="brand-info">
+            <h2>SoSo AI</h2>
+            <span class="badge" data-i18n="brandBadge">
+              <span class="badge-dot"></span>
+              <span>الرفيق الذكي</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-actions">
+        <button class="new-chat-btn" id="newChatBtn">
+          <span class="plus-icon">+</span>
+          <span data-i18n="newChat">محادثة جديدة</span>
+        </button>
+      </div>
+
+      <form class="search-box" role="search" autocomplete="off" onsubmit="return false;" action="#">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="search" id="searchConversations" name="soso_search_query" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="ابحث في المحادثات..." data-i18n-placeholder="searchPlaceholder">
+        <button type="button" id="clearSearchBtn" class="clear-search-btn" title="إلغاء البحث" style="display: none;">✕</button>
+      </form>
+
+      <!-- Conversations List -->
+      <div class="conversations-wrapper" id="conversationsList">
+        <div class="empty-state" data-i18n="noConversations">لا توجد محادثات سابقة</div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <!-- User Profile Bar -->
+        <div class="user-profile-bar" id="userProfileBar" style="display: none;">
+          <div class="user-avatar-wrapper" id="userAvatarWrapper" title="انقر لتغيير صورتك الشخصية">
+            <div class="user-avatar-badge" id="userAvatar">S</div>
+            <div class="user-avatar-overlay">
+              <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </div>
+            <input type="file" id="userAvatarFileInput" accept="image/*" style="display: none;">
+          </div>
+          <div class="user-profile-info">
+            <span class="user-profile-name" id="userName">سفيان رابحي</span>
+            <span class="user-profile-email" id="userEmail">user@example.com</span>
+          </div>
+          <button type="button" class="user-logout-btn" id="logoutBtn" title="تسجيل الخروج">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </div>
+
+        <button class="sidebar-btn" id="openSettingsBtn" title="الإعدادات">
+          <span data-i18n="settingsBtn">الإعدادات</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Chat Container -->
+    <main class="main-content">
+      <!-- Messages Scroll Area -->
+      <div class="messages-container" id="messagesContainer">
+        <!-- Hero Welcome (Shown when conversation is empty) -->
+        <div class="hero-welcome" id="heroWelcome">
+          <!-- Top Robot Logo & Brand Name -->
+          <div class="hero-brand-top">
+            <div class="hero-logo-box">
+              <img src="assets/logo_icon.png" alt="SoSo AI" class="hero-logo-img">
+            </div>
+            <div class="hero-brand-text">
+              <span class="navy-part">SoSo</span><span class="orange-part">AI</span>
+            </div>
+          </div>
+
+          <h1 class="hero-main-title">
+            <span data-i18n="heroWelcomePrefix">مرحباً بك في</span>
+            <span class="hero-title-highlight">SoSo AI</span>
+          </h1>
+          <p class="hero-subtitle" id="heroSubtitle" data-i18n="heroSubtitle">رفيقك ومساعدك الشخصي اليومي، فائق الذكاء للإجابة على الأسئلة، تنظيم يومك، وتحليل الصور بدقة متناهية</p>
+
+          <div class="suggestion-grid" id="suggestionGrid">
+            <!-- Card 1: تخطيط اليوم والإنتاجية (Top-Left in screenshot) -->
+            <div class="suggestion-card card-orange" data-prompt="ساعدني كرفيق شخصي في وضع جدول يومي واقعي ومثالي لزيادة الإنتاجية والتوازن اليوم">
+              <div class="card-arrow-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="card-content">
+                <h4 data-i18n="card2Title">تخطيط اليوم والإنتاجية</h4>
+                <p data-i18n="card2Desc">نظم مهامك وأولوياتك، واعمل على تحقيق أهدافك</p>
+              </div>
+              <div class="card-icon-badge badge-orange">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+            </div>
+
+            <!-- Card 2: تحليل الصور واستخراج النصوص (Top-Right in screenshot) -->
+            <div class="suggestion-card card-blue" data-prompt="حلل هذه الصورة بالتفصيل واستخرج أي نص أو معلومات هامة منها" data-need-image="true">
+              <div class="card-arrow-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="card-content">
+                <h4 data-i18n="card1Title">تحليل الصور واستخراج النصوص</h4>
+                <p data-i18n="card1Desc">إرفع أي صورة، مستند أو رسم بياني، واطلب منها ما تريده</p>
+              </div>
+              <div class="card-icon-badge badge-blue">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              </div>
+            </div>
+
+            <!-- Card 3: المسائل العلمية والرياضية (Bottom-Left in screenshot) -->
+            <div class="suggestion-card card-pink" data-prompt="أحتاج إلى حل وشرح دقيق وخطوة بخطوة لمسألة رياضية أو فيزيائية">
+              <div class="card-arrow-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="card-content">
+                <h4 data-i18n="card4Title">المسائل العلمية والرياضية</h4>
+                <p data-i18n="card4Desc">إجابات دقيقة مع خطوات الحل الواضحة</p>
+              </div>
+              <div class="card-icon-badge badge-pink">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"></path></svg>
+              </div>
+            </div>
+
+            <!-- Card 4: شرح المفاهيم والبرمجة (Bottom-Right in screenshot) -->
+            <div class="suggestion-card card-green" data-prompt="اشرح لي بالتفصيل وبأمثلة عملية كيف يعمل هذا المفهوم التقني مع كود توضيحي بسيط">
+              <div class="card-arrow-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="card-content">
+                <h4 data-i18n="card3Title">شرح المفاهيم والبرمجة</h4>
+                <p data-i18n="card3Desc">اشرح أي فكرة، تعلم مهارة جديدة، وامتلك أدوات لتحقيق أهدافك</p>
+              </div>
+              <div class="card-icon-badge badge-green">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Messages will be appended here -->
+        <div class="chat-flow" id="chatFlow"></div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-section">
+        <!-- Image Preview Chip -->
+        <div class="image-preview-bar" id="imagePreviewBar" style="display: none;">
+          <div class="preview-item">
+            <img id="previewImage" src="" alt="المعاينة">
+            <div class="preview-info">
+              <span class="preview-name" id="previewName" data-i18n="attachedImage">صورة مرفقة</span>
+              <span class="preview-hint" data-i18n="readyForAnalysis">جاهزة للتحليل مع السؤال</span>
+            </div>
+            <button class="remove-img-btn" id="removeImgBtn" title="إزالة الصورة" data-i18n-title="removeImage">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Deep Thinking Active Indicator Banner -->
+        <div class="deep-think-indicator-bar" id="deepThinkIndicatorBar" style="display: none;">
+          <div class="deep-think-indicator-content">
+            <span class="deep-think-dot"></span>
+            <span data-i18n="deepThinkActiveNotice">🧠 نمط التفكير العميق مُفعّل: ستحصل على إجابة تحليلية شاملة ومفصلة</span>
+          </div>
+          <button class="close-deep-think-btn" id="disableDeepThinkBtn" title="إلغاء التفكير العميق">✕</button>
+        </div>
+
+        <!-- Voice Listening Active Indicator Banner -->
+        <div class="voice-listening-bar" id="voiceListeningBar" style="display: none;">
+          <div class="voice-listening-content">
+            <div class="voice-pulse-indicator">
+              <span class="pulse-ring"></span>
+              <span class="mic-wave-dot"></span>
+            </div>
+            <span class="voice-listening-text" id="voiceListeningText" data-i18n="voiceListeningText">جاري الاستماع... تحدث الآن بلغتك أو لهجتك</span>
+          </div>
+          <button class="stop-listening-btn" id="stopListeningBtn" title="إيقاف" data-i18n-title="stopAudio">✕</button>
+        </div>
+
+        <!-- Input Box Container (Floating Pill) -->
+        <div class="input-box-container">
+          <!-- Send Button (Left in RTL) -->
+          <button class="send-btn" id="sendBtn" title="إرسال (Enter)" data-i18n-title="sendTooltip">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+
+          <!-- Voice Button -->
+          <button class="voice-btn" id="voiceBtn" title="إدخال صوتي" data-i18n-title="voiceTooltip">
+            <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          </button>
+
+          <!-- Text Input -->
+          <textarea 
+            id="chatInput" 
+            placeholder="اسأل SoSo أي شيء، أو ارفع صورة لمناقشتها..." 
+            data-i18n-placeholder="inputPlaceholder"
+            rows="1"
+            autocomplete="off"
+          ></textarea>
+
+          <!-- Deep Thinking Button (Brain Icon Only) -->
+          <button class="deep-think-btn" id="deepThinkBtn" title="تفعيل التفكير والتحليل العميق (إجابات مفصلة وشاملة)" data-i18n-title="deepThinkTooltip" type="button" aria-pressed="false" aria-label="تفكير عميق">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5"/>
+              <path d="M12 4.5a2.5 2.5 0 0 1 4.96-.46 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1 1.32 4.24 3 3 0 0 1-.34 5.58 2.5 2.5 0 0 1-2.96 3.08A2.5 2.5 0 0 1 12 19.5"/>
+              <path d="M12 4.5v15"/>
+            </svg>
+          </button>
+
+          <!-- Image Attachment Button (Right in RTL) -->
+          <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+          <button class="attach-btn" id="attachBtn" title="رفع صورة (أو اسحبها إلى هنا)" data-i18n-title="attachTooltip">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </button>
+        </div>
+
+        <div class="input-footer-note">
+          <span class="footer-dash">—</span>
+          <span data-i18n="inputFooter">مساعدك الذكي - رحلة معرفية لا تنتهي</span>
+          <span class="footer-dash">—</span>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal" style="display: none;">
+    <div class="modal-card settings-modal-card">
+      <div class="modal-header settings-modal-header">
+        <div class="settings-title-group">
+          <div class="settings-header-icon-box">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 data-i18n="settingsTitle" class="settings-modal-heading">إعدادات الموقع و SoSo AI</h3>
+            <p class="settings-modal-subheading">تخصيص الواجهة، النماذج، ألوان المظهر والذكاء الاصطناعي</p>
+          </div>
+        </div>
+        <button class="icon-btn close-modal-btn" id="closeSettingsBtn" title="إغلاق النافذة">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body settings-modal-body">
+        
+        <!-- 1. Language & Dialect Section -->
+        <div class="settings-section-card">
+          <div class="settings-section-header">
+            <div class="settings-sec-icon-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="settings-sec-title">اللغة والتحدث الصوتي</div>
+              <div class="settings-sec-desc">اختر لغة الموقع ولهجة الصوت المفضلة للردود والتحدث التفاعلي</div>
+            </div>
+          </div>
+
+          <div class="settings-fields-grid">
+            <div class="form-group">
+              <label for="settingsLanguage" data-i18n="settingsLanguage">لغة الواجهة الرئيسية</label>
+              <select id="settingsLanguage" class="form-select">
+                <option value="ar">🇸🇦 العربية (Arabic)</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="settingsDialect" data-i18n="settingsDialect">لهجة وصوت التحدث (Voice Dialect)</label>
+              <select id="settingsDialect" class="form-select">
+                <option value="auto">✨ تلقائي (حسب كلامك ولهجتك - Auto)</option>
+                <option value="ar-DZ">🇩🇿 اللهجة الجزائرية (Algerian Arabic)</option>
+                <option value="ar-EG">🇪🇬 اللهجة المصرية (Egyptian Arabic)</option>
+                <option value="ar-MA">🇲🇦 اللهجة المغربية (Moroccan Arabic)</option>
+                <option value="ar-SA">🇸🇦 العربية الفصحى / السعودية (Standard Arabic)</option>
+                <option value="ar-SY">🇸🇾 اللهجة الشامية / السورية (Levantine Arabic)</option>
+                <option value="ar-TN">🇹🇳 اللهجة التونسية (Tunisian Arabic)</option>
+                <option value="fr-FR">🇫🇷 Français (French)</option>
+                <option value="en-US">🇺🇸 English (US)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Themes & Colors Section -->
+        <div class="settings-section-card">
+          <div class="settings-section-header">
+            <div class="settings-sec-icon-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="settings-sec-title" data-i18n="settingsTheme">مظهر وألوان الواجهة (Theme Palette)</div>
+              <div class="settings-sec-desc">اختر نمط الألوان المفضل والمريح لعينيك في كل أوقات استخدام الموقع</div>
+            </div>
+          </div>
+
+          <div class="theme-picker-grid" id="themePickerGrid">
+            <div class="theme-card-option" data-theme="theme-wood">
+              <div class="theme-swatch wood-swatch"></div>
+              <div class="theme-card-title">🪵 خشبي دافئ</div>
+              <div class="theme-card-desc" data-i18n="themeWoodDesc">ألوان خشبية زاهية وصندل دافئ</div>
+            </div>
+            <div class="theme-card-option" data-theme="theme-olive">
+              <div class="theme-swatch olive-swatch"></div>
+              <div class="theme-card-title">🫒 زيتي طبيعي</div>
+              <div class="theme-card-desc" data-i18n="themeOliveDesc">ألوان زيتية وأعشاب برية نضرة</div>
+            </div>
+            <div class="theme-card-option" data-theme="theme-ocean">
+              <div class="theme-swatch ocean-swatch"></div>
+              <div class="theme-card-title">🌊 أزرق محيطي</div>
+              <div class="theme-card-desc" data-i18n="themeOceanDesc">أزرق سماوي وبحري منعش</div>
+            </div>
+            <div class="theme-card-option" data-theme="theme-sunset">
+              <div class="theme-swatch sunset-swatch"></div>
+              <div class="theme-card-title">🌅 غروب مرجاني</div>
+              <div class="theme-card-desc" data-i18n="themeSunsetDesc">درجات المرجان والخوخ الحيوية</div>
+            </div>
+            <div class="theme-card-option" data-theme="theme-light">
+              <div class="theme-swatch light-swatch"></div>
+              <div class="theme-card-title">☀️ ناصع كلاسيكي</div>
+              <div class="theme-card-desc" data-i18n="themeLightDesc">تصميم نهاري أبيض أنيق</div>
+            </div>
+            <div class="theme-card-option" data-theme="theme-dark">
+              <div class="theme-swatch dark-swatch"></div>
+              <div class="theme-card-title">🌙 ليلي فاخر</div>
+              <div class="theme-card-desc" data-i18n="themeDarkDesc">الوضع الليلي الداكن المريح</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. AI Engine & Provider Section -->
+        <div class="settings-section-card">
+          <div class="settings-section-header">
+            <div class="settings-sec-icon-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <div>
+              <div class="settings-sec-title" data-i18n="settingsProvider">مزود ومحرك الذكاء الاصطناعي</div>
+              <div class="settings-sec-desc">اختر مزود الذكاء الاصطناعي واضبط المفاتيح والنماذج المستخدمة</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="settingsProvider">مزود الخدمة المعتمد</label>
+            <select id="settingsProvider" class="form-select">
+              <option value="gemini">Google Gemini (موصى به - مجاني، فائق السرعة، رؤية بصرية متقدمة)</option>
+              <option value="openai_compatible">OpenAI / Groq / OpenRouter / خادم محلي</option>
+            </select>
+          </div>
+
+          <!-- Gemini Settings -->
+          <div id="geminiSettingsSection" class="provider-sub-box">
+            <div class="form-group">
+              <div class="label-with-link">
+                <label for="settingsGeminiKey">مفتاح Google Gemini API Key</label>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="helper-link-pill" data-i18n="getKeyFree">
+                  <span>احصل على مفتاح مجاني بضغطة زر</span>
+                  <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+                </a>
+              </div>
+              <div class="input-with-toggle">
+                <input type="password" id="settingsGeminiKey" placeholder="الصق مفتاح Gemini AI هنا..." class="form-input" dir="ltr">
+                <button type="button" class="toggle-password-btn" id="toggleGeminiKeyVis" title="إظهار / إخفاء المفتاح">
+                  <svg class="eye-icon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <div class="field-hint" id="geminiKeyStatus">لم يتم تعيين المفتاح بعد.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="settingsGeminiModel" data-i18n="settingsModel">النموذج الذكي (Gemini Model)</label>
+              <select id="settingsGeminiModel" class="form-select">
+                <option value="gemini-3.5-flash-lite" selected>Gemini 3.5 Flash Lite (الموصى به - فائق السرعة، استقرار عالي، رؤية بصرية)</option>
+                <option value="gemini-3.6-flash">Gemini 3.6 Flash (الجيل الأحدث، ذكاء فائق وتحليل عميق)</option>
+                <option value="gemini-3.8-flash">Gemini 3.8 Flash (النموذج التجريبي المتقدم)</option>
+                <option value="gemini-flash-lite-latest">Gemini Flash Lite (تحديث تلقائي مستمر)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- OpenAI Settings (Conditional) -->
+          <div id="openaiSettingsSection" class="provider-sub-box" style="display: none;">
+            <div class="form-group">
+              <div class="label-with-link">
+                <label for="settingsOpenaiKey">مفتاح OpenAI API Key</label>
+                <a href="https://platform.openai.com/api-keys" target="_blank" class="helper-link-pill">
+                  <span>احصل على مفتاح OpenAI</span>
+                  <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+                </a>
+              </div>
+              <div class="input-with-toggle">
+                <input type="password" id="settingsOpenaiKey" placeholder="الصق مفتاح sk-... هنا" class="form-input" dir="ltr">
+                <button type="button" class="toggle-password-btn" id="toggleOpenaiKeyVis" title="إظهار / إخفاء المفتاح">
+                  <svg class="eye-icon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <div class="field-hint" id="openaiKeyStatus">لم يتم تعيين المفتاح بعد.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="settingsOpenaiModelSelect">النموذج الذكي (OpenAI Model)</label>
+              <select id="settingsOpenaiModelSelect" class="form-select">
+                <option value="gpt-4o" selected>GPT-4o (النموذج الأقوى والأشمل مع ذكاء بصري)</option>
+                <option value="gpt-4o-mini">GPT-4o Mini (فائق السرعة واقتصادي وذكي جداً)</option>
+                <option value="o3-mini">o3-mini (نموذج استدلالي ذكي وسريع)</option>
+                <option value="o1">o1 (تفكير استدلالي عميق ومتطور)</option>
+                <option value="custom">نموذج مخصص آخر (Custom Model)...</option>
+              </select>
+              <input type="text" id="settingsOpenaiModel" placeholder="اكتب اسم النموذج المخصص هنا..." class="form-input" style="display: none; margin-top: 8px;" dir="ltr">
+            </div>
+
+            <div class="form-group">
+              <label for="settingsOpenaiBase">عنوان الـ API (Base URL - اختياري للمزودات المتوافقة)</label>
+              <input type="text" id="settingsOpenaiBase" placeholder="https://api.openai.com/v1" class="form-input" dir="ltr">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Google OAuth 2.0 Integration -->
+        <div class="settings-section-card settings-oauth-card">
+          <div class="settings-section-header">
+            <div class="settings-sec-icon-box google-icon-box">
+              <svg viewBox="0 0 24 24" width="18" height="18">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+            </div>
+            <div style="flex: 1;">
+              <div class="settings-sec-title">تسجيل الدخول الرسمي بحساب Google (OAuth 2.0)</div>
+              <div class="settings-sec-desc">ربط الموقع مع Google Cloud لتمكين المستخدمين من تسجيل الدخول بضغطة زر واحدة</div>
+            </div>
+            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" class="helper-link-pill oauth-cloud-link">
+              <span>Google Cloud</span>
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+          </div>
+
+          <div class="form-group">
+            <label for="settingsGoogleClientId">معرف العميل (Google Client ID)</label>
+            <input type="text" id="settingsGoogleClientId" placeholder="مثال: xxxxxxxx.apps.googleusercontent.com" class="form-input" dir="ltr">
+            <div class="field-hint" id="googleClientIdStatus">مطلوب لفتح نافذة اختيار الحسابات الرسمية من Google للمتابعة إلى SoSo AI.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="settingsGoogleClientSecret">المفتاح السري (Google Client Secret - اختياري / موصى به)</label>
+            <div class="input-with-toggle">
+              <input type="password" id="settingsGoogleClientSecret" placeholder="••••••••••••" class="form-input" dir="ltr">
+              <button type="button" class="toggle-password-btn" id="toggleGoogleSecretVis" title="إظهار / إخفاء المفتاح السري">
+                <svg class="eye-icon" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+            <div class="field-hint" id="googleSecretStatus">مخصص لإتمام التوثيق الخلفي وتأكيد رمز المصادقة بأمان تام.</div>
+          </div>
+
+          <div class="settings-uri-box">
+            <div class="settings-uri-header">
+              <span class="settings-uri-label">رابط إعادة التوجيه المعتمد (Authorized Redirect URI):</span>
+              <button type="button" class="copy-redirect-btn" id="copyRedirectUriBtn" title="نسخ الرابط">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="copyRedirectText">نسخ الرابط</span>
+              </button>
+            </div>
+            <code id="settingsRedirectUriText" class="settings-code-uri">http://127.0.0.1:8000/api/auth/google/callback</code>
+          </div>
+        </div>
+
+        <!-- 5. Temperature & Creativity Section -->
+        <div class="settings-section-card">
+          <div class="settings-section-header">
+            <div class="settings-sec-icon-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+              </svg>
+            </div>
+            <div style="flex: 1;">
+              <div class="settings-sec-title" data-i18n="settingsTemp">درجة الإبداع والدقة (Temperature)</div>
+              <div class="settings-sec-desc">تحكّم في مدى دقة ومنطقية إجابات المساعد مقابل التفكير الإبداعي والحر</div>
+            </div>
+            <div class="temp-badge-display">
+              <span id="tempValueDisplay">0.7</span>
+            </div>
+          </div>
+
+          <div class="temp-slider-wrapper">
+            <input type="range" id="settingsTemp" min="0" max="1" step="0.05" value="0.7" class="form-range settings-custom-range">
+            <div class="temp-scale-labels">
+              <span class="scale-point point-left">🎯 دقيق ومنطقي (0.2)</span>
+              <span class="scale-point point-center">⚖️ متوازن ومثالي (0.7)</span>
+              <span class="scale-point point-right">🎨 إبداعي ومبتكر (1.0)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer settings-modal-footer">
+        <button type="button" class="btn btn-secondary settings-cancel-btn" id="cancelSettingsBtn" data-i18n="cancel">
+          <span>إلغاء</span>
+        </button>
+        <button type="button" class="btn btn-primary settings-save-btn" id="saveSettingsBtn" data-i18n="saveSettings">
+          <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>حفظ الإعدادات</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Conversation Modal -->
+  <div class="modal-overlay" id="renameModal" style="display: none;">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-title-icon edit-icon-box">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <h3 data-i18n="editModalTitle">تعديل عنوان المحادثة</h3>
+        </div>
+        <button class="icon-btn close-modal-btn" id="closeRenameBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="renameInput" data-i18n="renameInputLabel">العنوان الجديد للمحادثة</label>
+          <input type="text" id="renameInput" class="form-input" placeholder="اكتب عنواناً للمحادثة..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelRenameBtn" data-i18n="cancel">إلغاء</button>
+        <button class="btn btn-primary" id="confirmRenameBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="saveRename">حفظ التغيير</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Conversation Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-title-icon delete-icon-box">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </div>
+          <h3 data-i18n="deleteModalTitle">حذف المحادثة</h3>
+        </div>
+        <button class="icon-btn close-modal-btn" id="closeDeleteBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc" data-i18n="confirmDeleteDesc">هل أنت متأكد من رغبتك في حذف هذه المحادثة نهائياً؟ لا يمكن التراجع عن هذه الخطوة.</p>
+        <div class="delete-chat-card-preview">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span id="deleteChatTitlePreview"></span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelDeleteBtn" data-i18n="cancel">إلغاء</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span data-i18n="confirmDeleteBtnText">نعم، حذف نهائي</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-overlay" id="logoutModal" style="display: none;">
+    <div class="modal-card modal-card-sm logout-modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-title-icon logout-icon-box">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </div>
+          <h3 data-i18n="logoutModalTitle">تسجيل الخروج</h3>
+        </div>
+        <button class="icon-btn close-modal-btn" id="closeLogoutBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc" data-i18n="confirmLogoutDesc">هل ترغب حقاً في تسجيل الخروج من حسابك في SoSo AI؟</p>
+        
+        <div class="logout-user-card-preview" id="logoutUserPreview">
+          <div class="logout-user-avatar-badge" id="logoutModalAvatarBadge">
+            <span id="logoutModalAvatarInitial">U</span>
+          </div>
+          <div class="logout-user-info-text">
+            <strong id="logoutModalUserName">مستخدم</strong>
+            <span id="logoutModalUserEmail">user@example.com</span>
+          </div>
+          <span class="logout-session-badge" data-i18n="currentSessionBadge">الجلسة الحالية</span>
+        </div>
+
+        <p class="logout-hint-desc" data-i18n="logoutHintText">💡 يمكنك تسجيل الدخول مجدداً في أي وقت للوصول إلى كافة محادثاتك وسجلاتك المحفوظة بأمان.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelLogoutBtn" data-i18n="cancel">إلغاء</button>
+        <button type="button" class="btn btn-danger auth-logout-confirm-btn" id="confirmLogoutBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span data-i18n="confirmLogoutBtnText">تسجيل الخروج</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Viewer Modal (Zoom) -->
+  <div class="image-modal-overlay" id="imageViewerModal" style="display: none;">
+    <div class="image-modal-content">
+      <button class="close-viewer-btn" id="closeImageViewerBtn">✕</button>
+      <img id="viewerImage" src="" alt="صورة مكبرة">
+    </div>
+  </div>
+
+  <!-- Mandatory Auth Gateway Modal (Sign Up, Sign In, Google Auth) -->
+  <div class="auth-modal-overlay" id="authModal" style="display: none;">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo-box">
+          <img src="assets/logo_icon.png" alt="SoSo AI" class="auth-logo-img">
+        </div>
+        <h2 class="auth-title">مرحباً بك في <span class="brand-text-colored">SoSo AI</span></h2>
+        <p class="auth-subtitle">أنشئ حسابك الآن أو سجّل دخولك للوصول إلى كافة الميزات والمحادثات الذكية</p>
+      </div>
+
+      <!-- Auth Alert / Notification -->
+      <div id="authAlert" class="auth-alert" style="display: none;"></div>
+
+      <!-- Auth Tabs: Sign Up vs Sign In -->
+      <div class="auth-tabs" id="authTabs">
+        <button type="button" class="auth-tab active" data-tab="signup" id="tabSignUpBtn">إنشاء حساب جديد</button>
+        <button type="button" class="auth-tab" data-tab="signin" id="tabSignInBtn">تسجيل الدخول</button>
+      </div>
+
+      <!-- 1. Sign Up Form -->
+      <form id="signUpForm" class="auth-form" autocomplete="off" novalidate>
+        <div class="form-group">
+          <label for="signUpName">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="field-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>الاسم الكامل</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="text" id="signUpName" name="account_user_name" class="form-input" placeholder="مثال: سفيان رابحي" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpEmail">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="field-icon"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <span>البريد الإلكتروني</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="text" inputmode="email" id="signUpEmail" name="account_user_val" class="form-input" placeholder="name@example.com" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signUpPassword">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="field-icon"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>كلمة المرور</span>
+            <span class="field-hint">(6 خانات أو أكثر)</span>
+          </label>
+          <div class="input-with-toggle">
+            <input type="password" id="signUpPassword" name="account_user_sec" class="form-input" placeholder="••••••••" required autocomplete="new-password" data-lpignore="true">
+            <button type="button" class="toggle-password-btn" id="toggleSignUpPass" title="إظهار / إخفاء كلمة المرور">
+              <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="signUpSubmitBtn">
+          <span>إنشاء حساب والبدء</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+
+        <div class="auth-switch-prompt">
+          <span>لديك حساب بالفعل؟</span>
+          <button type="button" class="auth-switch-link" id="goToSignInBtn">تسجيل الدخول</button>
+        </div>
+      </form>
+
+      <!-- 2. Verify OTP Form (Appears after registration) -->
+      <form id="verifyOtpForm" class="auth-form" style="display: none;">
+        <div class="verify-instructions">
+          <div class="verify-mail-icon-wrap" aria-label="أيقونة البريد">
+            <div class="mail-pulse-ring"></div>
+            <div class="mail-pulse-ring mail-pulse-ring-delayed"></div>
+            <div class="verify-mail-icon">
+              <svg class="mail-svg-icon" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3" class="mail-body-rect"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" class="mail-flap-path"></path>
+              </svg>
+              <span class="mail-float-sparkle s1">✦</span>
+              <span class="mail-float-sparkle s2">✦</span>
+            </div>
+          </div>
+          <h3>تأكيد البريد الإلكتروني</h3>
+          <p>أدخل رمز التحقق المكون من 6 أرقام المرسل إلى:<br><strong id="verifyEmailDisplay"></strong></p>
+        </div>
+
+        <!-- SMTP status & optional fallback -->
+        <div id="smtpNoticeBox" class="smtp-notice-card" style="display: none;">
+          <div class="smtp-notice-header">
+            <span class="smtp-status-badge">تنبيه خادم البريد</span>
+            <span class="smtp-status-text">خادم SMTP غير مربوط في ملف .env</span>
+          </div>
+          <p class="smtp-notice-desc">
+            لم نتمكن من إرسال الرسالة إلى بريدك تلقائياً لعدم اكتمال بيانات SMTP في <code>.env</code>. يمكنك الضغط أدناه لإظهار الكود المؤقت للمتابعة:
+          </p>
+          <button type="button" class="btn-reveal-code" id="revealCodeBtn">إظهار كود التفعيل المؤقت</button>
+          <div id="revealedCodeDisplay" class="revealed-code-box" style="display: none;"></div>
+        </div>
+
+        <div class="form-group otp-group">
+          <label for="verifyOtpInput">رمز التفعيل (6 أرقام)</label>
+          <input type="text" id="verifyOtpInput" class="form-input otp-input" placeholder="• • • • • •" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="verifySubmitBtn">
+          <span>تأكيد وتفعيل الحساب</span>
+        </button>
+
+        <div class="verify-actions-grid">
+          <button type="button" class="verify-pill-btn" id="resendCodeBtn" title="إعادة إرسال رمز التحقق إلى بريدك">
+            <svg class="verify-btn-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span id="resendCodeText">إعادة إرسال الرمز</span>
+          </button>
+
+          <button type="button" class="verify-pill-btn" id="backToSignUpBtn" title="الرجوع لتعديل البريد الإلكتروني">
+            <svg class="verify-btn-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span>تغيير البريد</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- 3. Sign In Form -->
+      <form id="signInForm" class="auth-form" style="display: none;" autocomplete="off" novalidate>
+        <div class="form-group">
+          <label for="signInEmail">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="field-icon"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <span>البريد الإلكتروني</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="text" inputmode="email" id="signInEmail" name="login_user_val" class="form-input" placeholder="name@example.com" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signInPassword">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="field-icon"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>كلمة المرور</span>
+          </label>
+          <div class="input-with-toggle">
+            <input type="password" id="signInPassword" name="login_user_sec" class="form-input" placeholder="••••••••" required autocomplete="current-password" data-lpignore="true">
+            <button type="button" class="toggle-password-btn" id="toggleSignInPass" title="إظهار / إخفاء كلمة المرور">
+              <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <div class="forgot-password-row">
+            <button type="button" class="auth-forgot-link-btn" id="forgotPasswordLink">
+              <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="7.5" cy="15.5" r="5.5"></circle>
+                <path d="m21 2-9.6 9.6"></path>
+                <path d="m15.5 7.5 3 3"></path>
+              </svg>
+              <span>نسيت كلمة المرور؟</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="signInSubmitBtn">
+          <span>تسجيل الدخول</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+
+        <div class="auth-switch-prompt">
+          <span>ليس لديك حساب بعد؟</span>
+          <button type="button" class="auth-switch-link" id="goToSignUpBtn">إنشاء حساب جديد</button>
+        </div>
+      </form>
+
+      <!-- 4. Forgot Password - Step 1: Request Reset Code -->
+      <form id="forgotPasswordForm" class="auth-form" style="display: none;" autocomplete="off" novalidate>
+        <div class="verify-instructions">
+          <div class="verify-mail-icon-wrap" aria-label="استعادة كلمة المرور">
+            <div class="mail-pulse-ring"></div>
+            <div class="mail-pulse-ring mail-pulse-ring-delayed"></div>
+            <div class="verify-mail-icon">
+              <svg class="mail-svg-icon" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="7.5" cy="15.5" r="5.5"></circle>
+                <path d="m21 2-9.6 9.6"></path>
+                <path d="m15.5 7.5 3 3"></path>
+              </svg>
+              <span class="mail-float-sparkle s1">✦</span>
+              <span class="mail-float-sparkle s2">✦</span>
+            </div>
+          </div>
+          <h3>استعادة كلمة المرور</h3>
+          <p>أدخل بريدك الإلكتروني المسجل، وسنرسل لك رمزاً عشوائياً آمناً لإعادة تعيين كلمة المرور فوراً.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="forgotEmail">البريد الإلكتروني</label>
+          <input type="text" inputmode="email" id="forgotEmail" name="recovery_user_val" class="form-input" placeholder="name@example.com" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other">
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="forgotSubmitBtn">
+          <span>إرسال رمز إعادة التعيين</span>
+        </button>
+
+        <div class="auth-back-row">
+          <button type="button" class="auth-back-pill-btn" id="backToSignInFromForgot">
+            <svg class="auth-back-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>العودة إلى تسجيل الدخول</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- 5. Reset Password - Step 2: Enter Code & New Password -->
+      <form id="resetPasswordForm" class="auth-form" style="display: none;">
+        <div class="verify-instructions">
+          <div class="verify-mail-icon-wrap" aria-label="تعيين كلمة مرور جديدة">
+            <div class="mail-pulse-ring"></div>
+            <div class="mail-pulse-ring mail-pulse-ring-delayed"></div>
+            <div class="verify-mail-icon">
+              <svg class="mail-svg-icon" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span class="mail-float-sparkle s1">✦</span>
+              <span class="mail-float-sparkle s2">✦</span>
+            </div>
+          </div>
+          <h3>تعيين كلمة مرور جديدة</h3>
+          <p>أدخل الرمز المكون من 6 أرقام المرسل إلى:<br><strong id="resetEmailDisplay"></strong></p>
+        </div>
+
+        <!-- Fallback notice if SMTP unavailable -->
+        <div id="smtpResetNoticeBox" class="smtp-notice-card" style="display: none;">
+          <div class="smtp-notice-header">
+            <span class="smtp-status-badge">تنبيه خادم البريد</span>
+            <span class="smtp-status-text">خادم SMTP غير مربوط في ملف .env</span>
+          </div>
+          <p class="smtp-notice-desc">
+            لم نتمكن من إرسال الرسالة إلى بريدك تلقائياً لعدم اكتمال بيانات SMTP في <code>.env</code>. يمكنك الضغط أدناه لإظهار الكود المؤقت للمتابعة:
+          </p>
+          <button type="button" class="btn-reveal-code" id="revealResetCodeBtn">إظهار كود التحقق المؤقت</button>
+          <div id="revealedResetCodeDisplay" class="revealed-code-box" style="display: none;"></div>
+        </div>
+
+        <div class="form-group otp-group">
+          <label for="resetOtpInput">رمز التحقق (6 أرقام)</label>
+          <input type="text" id="resetOtpInput" class="form-input otp-input" placeholder="• • • • • •" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" required>
+        </div>
+
+        <div class="form-group">
+          <label for="newPasswordInput">كلمة المرور الجديدة (6 خانات أو أكثر)</label>
+          <div class="input-with-toggle">
+            <input type="password" id="newPasswordInput" class="form-input" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+            <button type="button" class="toggle-password-btn" id="toggleNewPass" title="إظهار / إخفاء كلمة المرور">
+              <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPasswordInput">تأكيد كلمة المرور الجديدة</label>
+          <div class="input-with-toggle">
+            <input type="password" id="confirmPasswordInput" class="form-input" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+            <button type="button" class="toggle-password-btn" id="toggleConfirmPass" title="إظهار / إخفاء كلمة المرور">
+              <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="resetPasswordSubmitBtn">
+          <span>حفظ كلمة المرور الجديدة</span>
+        </button>
+
+        <div class="verify-actions-grid">
+          <button type="button" class="verify-pill-btn" id="resendResetCodeBtn" title="إعادة إرسال رمز التحقق إلى بريدك">
+            <svg class="verify-btn-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span id="resendResetCodeText">إعادة إرسال الرمز</span>
+          </button>
+
+          <button type="button" class="verify-pill-btn" id="backToSignInFromReset">
+            <svg class="verify-btn-icon auth-back-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>العودة للدخول</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="auth-footer-note">
+        <span>🔒 حسابك ومحادثاتك محمية بأمان تام ومشفرة</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=4.1"></script>
+</body>
+</html>

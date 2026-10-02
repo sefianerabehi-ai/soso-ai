@@ -1,0 +1,9 @@
+.venv
+__pycache__
+*.pyc
+.git
+scratch
+test_output.txt
+*.png
+!frontend/assets/*
+!data/uploads/*
