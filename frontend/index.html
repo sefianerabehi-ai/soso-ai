@@ -36,7 +36,7 @@
   <!-- Google Identity Services (GSI) SDK for Official Sign In with Google -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link rel="stylesheet" href="style.css?v=4.1">
+  <link rel="stylesheet" href="style.css?v=5.0">
 </head>
 <body class="theme-wood">
   <div class="app-container">
@@ -56,6 +56,9 @@
             </span>
           </div>
         </div>
+        <button type="button" class="close-sidebar-btn" id="closeSidebarBtn" title="إغلاق القائمة" aria-label="إغلاق القائمة">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
 
       <div class="sidebar-actions">
@@ -102,9 +105,26 @@
         </button>
       </div>
     </aside>
+    
+    <!-- Mobile Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
     <!-- Main Chat Container -->
     <main class="main-content">
+      <!-- Mobile Top Navigation Bar -->
+      <header class="mobile-top-bar" id="mobileTopBar">
+        <button type="button" class="mobile-menu-btn" id="toggleSidebarBtn" title="المحادثات والقائمة" aria-label="فتح القائمة">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div class="mobile-brand">
+          <img src="assets/logo_icon.png" alt="SoSo AI" class="mobile-brand-logo">
+          <span class="mobile-brand-title">SoSo AI</span>
+        </div>
+        <button type="button" class="mobile-action-btn" id="mobileNewChatBtn" title="محادثة جديدة" aria-label="محادثة جديدة">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </header>
+
       <!-- Messages Scroll Area -->
       <div class="messages-container" id="messagesContainer">
         <!-- Hero Welcome (Shown when conversation is empty) -->
@@ -978,6 +998,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=4.1"></script>
+  <script src="app.js?v=5.0"></script>
 </body>
 </html>
